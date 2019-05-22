@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Library.Services;
 
 namespace Library
 {
@@ -31,7 +32,7 @@ namespace Library
             var connectionString = Configuration["connectionStrings:libraryDBConnectionString"];
             services.AddDbContext<LibraryContext>(o => o.UseSqlServer(connectionString));
             //Todo: Create and add scope for Library Repository
-            services.AddScoped<ILibraryRepository, ILibraryRepository>();
+            services.AddScoped<ILibraryRepository, LibraryRepository>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +48,7 @@ namespace Library
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             libraryContext.EnsureSeedDataForContext();
             app.UseMvc();

@@ -9,6 +9,7 @@ namespace Library.Entities
     {
         public static void EnsureSeedDataForContext(this LibraryContext context)
         {
+
             context.Authors.RemoveRange(context.Authors);
             context.SaveChanges();
 

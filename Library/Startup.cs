@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Library.Services;
+using Library.API.Helper;
+using Library.API.Models;
 
 namespace Library
 {
@@ -48,6 +50,15 @@ namespace Library
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            AutoMapper.Mapper.Initialize(config =>
+            {
+                config.CreateMap<Entities.Author, Library.API.Models.AuthorDetails>()
+                .ForMember(dest => dest.Name, Opt => Opt.MapFrom(src =>
+               $"{src.FirstName} {src.LastName}"))
+                .ForMember(dest => dest.Age, Opt => Opt.MapFrom(src =>
+              DateTimeOffsetExtensions.GetCurrentAge(src.DateOfBirth)));
+            });
             
             app.UseHttpsRedirection();
             libraryContext.EnsureSeedDataForContext();
